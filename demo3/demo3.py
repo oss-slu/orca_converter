@@ -34,7 +34,7 @@ def findTerms():
         lineEmpty =0
         for line in Lines:
             if term in line:
-                termLineNo.append(lineNo)     # record the line number where search term is
+                termLineNo.append(lineNo)     # record the line number where search term is and store it in an array
             lineNo += 1
 
         for i in sections:
@@ -44,7 +44,7 @@ def findTerms():
 
             if sectionLines[0] == 'WHOLE':
                 while lineEmpty == 0:
-                    if Lines[startLine] != "\n":
+                    if Lines[startLine] != "\n": # TODO: Fix bug on some sections because of empty line condition, likely with function described below near 'LAST'.
                         section = document.add_paragraph(Lines[startLine])
                         startLine += 1
                     else:
@@ -61,7 +61,7 @@ def findTerms():
                 lineCount = 0
                 title = document.add_paragraph(term)
                 while lineCount < int(sectionLines[1]):
-                    section = document.add_paragraph(Lines[startLine+10])
+                    section = document.add_paragraph(Lines[startLine+10])  # instead of 10 here, use the return value of a function that gives you how many lines are in a certain section
                     startLine += 1
                     lineCount += 1
 
@@ -73,12 +73,13 @@ def closeAndSave():
 
 def specifySection(term):
     sectionInput = input("Which sections of " + term + " would you like to include? (e.g., 1,2) ")
-    sections = [int(sectionNumber) for sectionNumber in sectionInput.split(',')]
+    sections = [int(sectionNumber) for sectionNumber in sectionInput.split(',')] # sections would be [1, 2] if user entered the example above. 
     return sections
 
 def specifyLines(term, sectionNo):
     linesInput = input("Would you like the WHOLE section, FIRST x lines, or LAST x lines of " + term + " #" + str(sectionNo) + "? (e.g., FIRST 5) ").upper()
     sectionLines = linesInput.split(" ")
+    # for example, sectionLines would be ['FIRST', '3'] if user input FIRST 3
     return sectionLines
 
 
@@ -86,7 +87,7 @@ def main():
     start()
     findTerms()
     closeAndSave()
-    print(terms)
+    print(terms) # this print statement is just for debug
 
 
 if __name__ == "__main__":
